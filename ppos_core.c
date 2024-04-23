@@ -8,12 +8,18 @@
 task_t main_task;
 task_t *current_task;
 task_t *ready_tasks_queue;
-int available_tid = 0;
+int available_tid = 1;
 
 
 void ppos_init() {
     setvbuf(stdout, 0, _IONBF, 0);
+    getcontext(&main_task.context);
+    main_task.tid = 0;
+    main_task.status = 1;
     current_task = &main_task;
+    #ifdef DEBUG
+        printf ("ppos iniciado\n") ;
+    #endif
 }
 
 int task_init(task_t *task, void (*start_func)(void *), void *arg) {
@@ -34,6 +40,9 @@ int task_init(task_t *task, void (*start_func)(void *), void *arg) {
     task->tid = available_tid;
     available_tid += 1;
     task->status = 0;
+    #ifdef DEBUG
+        printf ("task_init: iniciada tarefa %d\n", task->tid) ;
+    #endif
     return task->tid;
 }
 
@@ -42,16 +51,24 @@ int task_switch(task_t *task) {
         return -1;
     }
     task_t *old_task;
-    ucontext_t old_context;
     old_task = current_task;
     current_task = task;
     task->status = 1;
-    swapcontext(&old_context, &task->context);
-    old_task->context = old_context;
+    swapcontext(&old_task->context, &task->context);
     old_task->status = 0;
+    #ifdef DEBUG
+        printf ("task_switch: trocada tarefa %d -> %d\n", task_id(), task->tid) ;
+    #endif
     return 1;
 }
 
 void task_exit(int exit_code) {
+    #ifdef DEBUG
+        printf ("task_exit: encerrada tarefa %d\n", task_id()) ;
+    #endif
     task_switch(&main_task);
+}
+
+int task_id() {
+    return current_task->tid;
 }

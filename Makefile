@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -g
-SRCS = pingpong-tasks1.c ppos_core.c
+SRCS = pingpong-tasks3.c ppos_core.c
 OBJS = $(SRCS:.c=.o)
 TARGET = main
 
