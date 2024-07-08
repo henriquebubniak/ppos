@@ -10,9 +10,20 @@ task_t *current_task;
 task_t *ready_tasks_queue;
 int available_tid = 0;
 
+int task_id() {
+    return current_task->tid;
+}
 
 void ppos_init() {
     setvbuf(stdout, 0, _IONBF, 0);
+    char* stack;
+    ucontext_t context;
+    getcontext(&context);
+    stack = malloc (STACKSIZE);
+    main_task.context = context;
+    main_task.tid = available_tid;
+    available_tid += 1;
+    main_task.status = 0;
     current_task = &main_task;
 }
 
@@ -38,16 +49,17 @@ int task_init(task_t *task, void (*start_func)(void *), void *arg) {
 }
 
 int task_switch(task_t *task) {
+    #ifdef DEBUG
+        printf("task_switch: task %d -> task %d\n", current_task->tid, task->tid);
+    #endif
     if (task == NULL) {
         return -1;
     }
     task_t *old_task;
-    ucontext_t old_context;
     old_task = current_task;
     current_task = task;
     task->status = 1;
-    swapcontext(&old_context, &task->context);
-    old_task->context = old_context;
+    swapcontext(&old_task->context, &task->context);
     old_task->status = 0;
     return 1;
 }
