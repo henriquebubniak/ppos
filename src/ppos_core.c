@@ -10,10 +10,6 @@ task_t *current_task;
 task_t *ready_tasks_queue;
 int available_tid = 1;
 
-int task_id() {
-    return current_task->tid;
-}
-
 void ppos_init() {
     setvbuf(stdout, 0, _IONBF, 0);
     getcontext(&main_task.context);
