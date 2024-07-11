@@ -34,6 +34,10 @@ void ppos_init () ;
 
 // gerência de tarefas =========================================================
 
+int make_task (task_t *task,			// descritor da nova tarefa
+               void  (*start_func)(void *),	// funcao corpo da tarefa
+               void   *arg) ;			// argumentos para a tarefa
+
 // Inicializa uma nova tarefa. Retorna um ID> 0 ou erro.
 int task_init (task_t *task,			// descritor da nova tarefa
                void  (*start_func)(void *),	// funcao corpo da tarefa
