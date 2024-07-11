@@ -1,5 +1,6 @@
 #include "ppos.h"
 #include "ppos_data.h"
+#include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ucontext.h>
@@ -7,7 +8,7 @@
 
 task_t main_task;
 task_t *current_task;
-task_t *ready_tasks_queue;
+queue_t *ready_tasks_queue = NULL;
 int available_tid = 1;
 
 
