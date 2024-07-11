@@ -81,7 +81,7 @@ void task_exit(int exit_code) {
     #ifdef DEBUG
         printf ("task_exit: encerrada tarefa %d\n", task_id()) ;
     #endif
-    task_switch(&main_task);
+    task_switch(&dispatcher);
 }
 
 int task_id() {
