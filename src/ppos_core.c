@@ -88,6 +88,10 @@ int task_id() {
     return current_task->tid;
 }
 
+void task_yield() {
+    queue_append(&ready_tasks_queue, (queue_t*)current_task);
+    task_switch(&dispatcher);
+}
 
 void dispatch() {
     while(1) {
