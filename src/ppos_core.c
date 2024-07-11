@@ -16,14 +16,14 @@ void print_elem(void* arg) {
 }
 
 void ppos_init() {
+    #ifdef DEBUG
+        printf ("ppos iniciado\n") ;
+    #endif
     setvbuf(stdout, 0, _IONBF, 0);
     getcontext(&main_task.context);
     main_task.tid = 0;
     main_task.status = 1;
     current_task = &main_task;
-    #ifdef DEBUG
-        printf ("ppos iniciado\n") ;
-    #endif
 }
 
 int make_task(task_t *task, void (*start_func)(void *), void *arg) {
