@@ -85,6 +85,23 @@ int task_id() {
     return current_task->tid;
 }
 
+
+void dispatch() {
+    while(1) {
+        task_t* next_task = schedule();
+        if (next_task == NULL) {
+            return;
+        }
+        queue_remove(&ready_tasks_queue, (queue_t*)next_task);
+        task_switch(next_task);
+
+        #ifdef DEBUG
+            printf("dispatch next_task: %d\n", next_task->tid);
+            queue_print("Ready", ready_tasks_queue, print_elem);
+        #endif
+    }
+}
+
 task_t* schedule() {
     return (task_t*)ready_tasks_queue;
 }
