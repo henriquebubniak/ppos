@@ -84,3 +84,7 @@ void task_exit(int exit_code) {
 int task_id() {
     return current_task->tid;
 }
+
+task_t* schedule() {
+    return (task_t*)ready_tasks_queue;
+}
