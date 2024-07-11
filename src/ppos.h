@@ -52,6 +52,10 @@ void task_exit (int exit_code) ;
 // alterna a execução para a tarefa indicada
 int task_switch (task_t *task) ;
 
+void dispatch();
+
+task_t* schedule();
+
 // suspende a tarefa atual,
 // transferindo-a da fila de prontas para a fila "queue"
 void task_suspend (task_t **queue) ;
