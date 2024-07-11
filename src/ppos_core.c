@@ -70,9 +70,6 @@ int task_switch(task_t *task) {
     task->status = 1;
     swapcontext(&old_task->context, &task->context);
     old_task->status = 0;
-    #ifdef DEBUG
-        printf ("task_switch: trocada tarefa %d -> %d\n", task_id(), task->tid) ;
-    #endif
     return 1;
 }
 
