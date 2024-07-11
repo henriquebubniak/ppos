@@ -6,6 +6,7 @@
 #include <ucontext.h>
 #define STACKSIZE 64*1024	/* tamanho de pilha das threads */
 
+task_t dispatcher;
 task_t main_task;
 task_t *current_task;
 queue_t *ready_tasks_queue = NULL;
@@ -25,6 +26,7 @@ void ppos_init() {
     main_task.tid = 0;
     main_task.status = 1;
     current_task = &main_task;
+    make_task(&dispatcher, dispatch, "");
 }
 
 int make_task(task_t *task, void (*start_func)(void *), void *arg) {
@@ -47,6 +49,7 @@ int make_task(task_t *task, void (*start_func)(void *), void *arg) {
     task->status = 0;
     return task->tid;
 }
+
 int task_init(task_t *task, void (*start_func)(void *), void *arg) {
     if (make_task(task, start_func, arg) < 0) {
         return -1;
