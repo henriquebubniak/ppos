@@ -21,7 +21,7 @@ void ppos_init() {
     #endif
 }
 
-int task_init(task_t *task, void (*start_func)(void *), void *arg) {
+int make_task(task_t *task, void (*start_func)(void *), void *arg) {
     char* stack;
     ucontext_t context;
     getcontext(&context);
@@ -39,6 +39,13 @@ int task_init(task_t *task, void (*start_func)(void *), void *arg) {
     task->tid = available_tid;
     available_tid += 1;
     task->status = 0;
+    return task->tid;
+}
+int task_init(task_t *task, void (*start_func)(void *), void *arg) {
+    if (make_task(task, start_func, arg) < 0) {
+        return -1;
+    };
+    queue_append(&ready_tasks_queue, (queue_t*)task);
     #ifdef DEBUG
         printf ("task_init: iniciada tarefa %d\n", task->tid) ;
     #endif
