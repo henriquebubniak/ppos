@@ -54,7 +54,7 @@ int task_switch (task_t *task) ;
 
 void dispatch();
 
-task_t* schedule();
+task_t* scheduler();
 
 // suspende a tarefa atual,
 // transferindo-a da fila de prontas para a fila "queue"

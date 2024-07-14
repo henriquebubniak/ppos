@@ -112,7 +112,7 @@ void task_yield() {
 
 void dispatch() {
     while(1) {
-        task_t* next_task = schedule();
+        task_t* next_task = scheduler();
         if (next_task == NULL) {
             return;
         }
@@ -126,8 +126,35 @@ void dispatch() {
     }
 }
 
-task_t* schedule() {
-    return (task_t*)ready_tasks_queue;
+task_t* scheduler() {
+    #ifdef DEBUG
+        queue_print("Priorities:", ready_tasks_queue, print_elem_prio);
+    #endif
+    queue_t* iterator = ready_tasks_queue;
+    if (iterator == NULL) {
+        return NULL;
+    }
+    task_t* min_prio_task = (task_t*) iterator;
+    do {
+        iterator = iterator->next;
+        if (((task_t*) iterator)->dynamic_priority < min_prio_task->dynamic_priority) {
+            min_prio_task = (task_t*) iterator; 
+        }
+    } while (iterator != ready_tasks_queue);
+    iterator = ready_tasks_queue;
+    min_prio_task->dynamic_priority = min_prio_task->static_priority;
+    do {
+        if ((task_t*)iterator == min_prio_task) {
+            iterator = iterator->next;
+            continue;
+        }
+        ((task_t*)iterator)->dynamic_priority -= 1; 
+        iterator = iterator->next;
+    } while (iterator != ready_tasks_queue);
+
+    return min_prio_task;
+}
+
 void task_setprio(task_t *task, int prio) {
     if (task == NULL) {
         current_task->static_priority = prio;
