@@ -19,6 +19,12 @@ void print_elem_id(void* arg) {
     }
     printf("%d, ", ((task_t*)arg)->tid);
 }
+void print_elem_prio(void* arg) {
+    if (arg == NULL) {
+        return;
+    }
+    printf("%d:p%d, ", ((task_t*)arg)->tid, ((task_t*)arg)->dynamic_priority);
+}
 
 void ppos_init() {
     #ifdef DEBUG
