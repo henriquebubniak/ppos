@@ -8,12 +8,15 @@
 
 task_t dispatcher;
 task_t main_task;
-task_t *current_task;
+task_t *current_task = NULL;
 queue_t *ready_tasks_queue = NULL;
 int available_tid = 1;
 
 
-void print_elem(void* arg) {
+void print_elem_id(void* arg) {
+    if (arg == NULL) {
+        return;
+    }
     printf("%d, ", ((task_t*)arg)->tid);
 }
 
@@ -30,6 +33,9 @@ void ppos_init() {
 }
 
 int make_task(task_t *task, void (*start_func)(void *), void *arg) {
+    if (task == NULL || start_func == NULL) {
+        return -1;
+    }
     char* stack;
     ucontext_t context;
     getcontext(&context);
@@ -51,6 +57,9 @@ int make_task(task_t *task, void (*start_func)(void *), void *arg) {
 }
 
 int task_init(task_t *task, void (*start_func)(void *), void *arg) {
+    if (task == NULL || start_func == NULL) {
+        return -1;
+    }
     if (make_task(task, start_func, arg) < 0) {
         return -1;
     };
