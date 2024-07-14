@@ -53,6 +53,8 @@ int make_task(task_t *task, void (*start_func)(void *), void *arg) {
     task->tid = available_tid;
     available_tid += 1;
     task->status = 0;
+    task->dynamic_priority = 0;
+    task->static_priority = 0;
     return task->tid;
 }
 
@@ -120,4 +122,18 @@ void dispatch() {
 
 task_t* schedule() {
     return (task_t*)ready_tasks_queue;
+void task_setprio(task_t *task, int prio) {
+    if (task == NULL) {
+        current_task->static_priority = prio;
+        current_task->dynamic_priority = prio;
+    }
+    task->static_priority = prio;
+    task->dynamic_priority = prio;
+}
+
+int task_getprio(task_t *task) {
+    if (task == NULL) {
+        return current_task->static_priority;
+    }
+    return task->static_priority;
 }
